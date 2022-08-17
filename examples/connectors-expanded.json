@@ -1,0 +1,142 @@
+{
+  "shipments-file-sink": {
+    "status": {
+      "name": "shipments-file-sink",
+      "connector": {
+        "state": "RUNNING",
+        "worker_id": "localhost:8083"
+      },
+      "tasks": [
+        {
+          "id": 0,
+          "state": "RUNNING",
+          "worker_id": "localhost:8083"
+        }
+      ],
+      "type": "sink"
+    },
+    "info": {
+      "name": "shipments-file-sink",
+      "config": {
+        "connector.class": "org.apache.kafka.connect.file.FileStreamSinkConnector",
+        "file": "/tmp/ship.out",
+        "topics": "shipments.events",
+        "tasks.max": "1",
+        "name": "shipments-file-sink",
+        "value.converter": "org.apache.kafka.connect.storage.StringConverter",
+        "key.converter": "org.apache.kafka.connect.storage.StringConverter"
+      },
+      "tasks": [
+        {
+          "connector": "shipments-file-sink",
+          "task": 0
+        }
+      ],
+      "type": "sink"
+    }
+  },
+  "dr-mirror-source": {
+    "status": {
+      "name": "dr-mirror-source",
+      "connector": {
+        "state": "RUNNING",
+        "worker_id": "localhost:8083"
+      },
+      "tasks": [],
+      "type": "source"
+    },
+    "info": {
+      "name": "dr-mirror-source",
+      "config": {
+        "connector.class": "org.apache.kafka.connect.mirror.MirrorSourceConnector",
+        "target.cluster.alias": "dst",
+        "replication.factor": "1",
+        "emit.heartbeats.enabled": "false",
+        "sync.topic.acls.enabled": "false",
+        "topics": "^never-match$",
+        "tasks.max": "1",
+        "source.cluster.alias": "src",
+        "name": "dr-mirror-source",
+        "target.cluster.bootstrap.servers": "localhost:9092",
+        "source.cluster.bootstrap.servers": "localhost:9092"
+      },
+      "tasks": [],
+      "type": "source"
+    }
+  },
+  "audit-archive-sink": {
+    "status": {
+      "name": "audit-archive-sink",
+      "connector": {
+        "state": "RUNNING",
+        "worker_id": "localhost:8083"
+      },
+      "tasks": [
+        {
+          "id": 0,
+          "state": "FAILED",
+          "worker_id": "localhost:8083",
+          "trace": "org.apache.kafka.connect.errors.ConnectException: Couldn't find or create file '/proc/archive/audit.log' for FileStreamSinkTask\n\tat org.apache.kafka.connect.file.FileStreamSinkTask.start(FileStreamSinkTask.java:74)\n\tat org.apache.kafka.connect.runtime.WorkerSinkTask.initializeAndStart(WorkerSinkTask.java:324)\n\tat org.apache.kafka.connect.runtime.WorkerTask.doStart(WorkerTask.java:176)\n\tat org.apache.kafka.connect.runtime.WorkerTask.doRun(WorkerTask.java:225)\n\tat org.apache.kafka.connect.runtime.WorkerTask.run(WorkerTask.java:281)\n\tat org.apache.kafka.connect.runtime.isolation.Plugins.lambda$withClassLoader$1(Plugins.java:238)\n\tat java.base/java.util.concurrent.Executors$RunnableAdapter.call(Unknown Source)\n\tat java.base/java.util.concurrent.FutureTask.run(Unknown Source)\n\tat java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(Unknown Source)\n\tat java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(Unknown Source)\n\tat java.base/java.lang.Thread.run(Unknown Source)\nCaused by: java.nio.file.NoSuchFileException: /proc/archive/audit.log\n\tat java.base/sun.nio.fs.UnixException.translateToIOException(Unknown Source)\n\tat java.base/sun.nio.fs.UnixException.rethrowAsIOException(Unknown Source)\n\tat java.base/sun.nio.fs.UnixException.rethrowAsIOException(Unknown Source)\n\tat java.base/sun.nio.fs.UnixFileSystemProvider.newByteChannel(Unknown Source)\n\tat java.base/java.nio.file.spi.FileSystemProvider.newOutputStream(Unknown Source)\n\tat java.base/java.nio.file.Files.newOutputStream(Unknown Source)\n\tat org.apache.kafka.connect.file.FileStreamSinkTask.start(FileStreamSinkTask.java:70)\n\t... 10 more\n"
+        }
+      ],
+      "type": "sink"
+    },
+    "info": {
+      "name": "audit-archive-sink",
+      "config": {
+        "connector.class": "org.apache.kafka.connect.file.FileStreamSinkConnector",
+        "file": "/proc/archive/audit.log",
+        "topics": "orders",
+        "tasks.max": "1",
+        "name": "audit-archive-sink",
+        "value.converter": "org.apache.kafka.connect.storage.StringConverter",
+        "key.converter": "org.apache.kafka.connect.storage.StringConverter"
+      },
+      "tasks": [
+        {
+          "connector": "audit-archive-sink",
+          "task": 0
+        }
+      ],
+      "type": "sink"
+    }
+  },
+  "orders-file-sink": {
+    "status": {
+      "name": "orders-file-sink",
+      "connector": {
+        "state": "RUNNING",
+        "worker_id": "localhost:8083"
+      },
+      "tasks": [
+        {
+          "id": 0,
+          "state": "FAILED",
+          "worker_id": "localhost:8083",
+          "trace": "org.apache.kafka.connect.errors.ConnectException: Tolerance exceeded in error handler\n\tat org.apache.kafka.connect.runtime.errors.RetryWithToleranceOperator.execAndHandleError(RetryWithToleranceOperator.java:261)\n\tat org.apache.kafka.connect.runtime.errors.RetryWithToleranceOperator.execute(RetryWithToleranceOperator.java:180)\n\tat org.apache.kafka.connect.runtime.WorkerSinkTask.convertAndTransformRecord(WorkerSinkTask.java:541)\n\tat org.apache.kafka.connect.runtime.WorkerSinkTask.convertMessages(WorkerSinkTask.java:518)\n\tat org.apache.kafka.connect.runtime.WorkerSinkTask.poll(WorkerSinkTask.java:344)\n\tat org.apache.kafka.connect.runtime.WorkerSinkTask.iteration(WorkerSinkTask.java:247)\n\tat org.apache.kafka.connect.runtime.WorkerSinkTask.execute(WorkerSinkTask.java:216)\n\tat org.apache.kafka.connect.runtime.WorkerTask.doRun(WorkerTask.java:226)\n\tat org.apache.kafka.connect.runtime.WorkerTask.run(WorkerTask.java:281)\n\tat org.apache.kafka.connect.runtime.isolation.Plugins.lambda$withClassLoader$1(Plugins.java:238)\n\tat java.base/java.util.concurrent.Executors$RunnableAdapter.call(Unknown Source)\n\tat java.base/java.util.concurrent.FutureTask.run(Unknown Source)\n\tat java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(Unknown Source)\n\tat java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(Unknown Source)\n\tat java.base/java.lang.Thread.run(Unknown Source)\nCaused by: org.apache.kafka.connect.errors.DataException: Converting byte[] to Kafka Connect data failed due to serialization error: \n\tat org.apache.kafka.connect.json.JsonConverter.toConnectData(JsonConverter.java:347)\n\tat org.apache.kafka.connect.storage.Converter.toConnectData(Converter.java:91)\n\tat org.apache.kafka.connect.runtime.WorkerSinkTask.lambda$convertAndTransformRecord$4(WorkerSinkTask.java:541)\n\tat org.apache.kafka.connect.runtime.errors.RetryWithToleranceOperator.execAndRetry(RetryWithToleranceOperator.java:208)\n\tat org.apache.kafka.connect.runtime.errors.RetryWithToleranceOperator.execAndHandleError(RetryWithToleranceOperator.java:245)\n\t... 14 more\nCaused by: org.apache.kafka.common.errors.SerializationException: com.fasterxml.jackson.core.JsonParseException: Unrecognized token 'period': was expecting (JSON String, Number, Array, Object or token 'null', 'true' or 'false')\n at [Source: REDACTED (`StreamReadFeature.INCLUDE_SOURCE_IN_LOCATION` disabled); line: 1, column: 8]\n\tat org.apache.kafka.connect.json.JsonDeserializer.deserialize(JsonDeserializer.java:75)\n\tat org.apache.kafka.connect.json.JsonConverter.toConnectData(JsonConverter.java:345)\n\t... 18 more\nCaused by: com.fasterxml.jackson.core.JsonParseException: Unrecognized token 'period': was expecting (JSON String, Number, Array, Object or token 'null', 'true' or 'false')\n at [Source: REDACTED (`StreamReadFeature.INCLUDE_SOURCE_IN_LOCATION` disabled); line: 1, column: 8]\n\tat com.fasterxml.jackson.core.JsonParser._constructError(JsonParser.java:2481)\n\tat com.fasterxml.jackson.core.base.ParserMinimalBase._reportError(ParserMinimalBase.java:762)\n\tat com.fasterxml.jackson.core.json.UTF8StreamJsonParser._reportInvalidToken(UTF8StreamJsonParser.java:3703)\n\tat com.fasterxml.jackson.core.json.UTF8StreamJsonParser._handleUnexpectedValue(UTF8StreamJsonParser.java:2791)\n\tat com.fasterxml.jackson.core.json.UTF8StreamJsonParser._nextTokenNotInObject(UTF8StreamJsonParser.java:911)\n\tat com.fasterxml.jackson.core.json.UTF8StreamJsonParser.nextToken(UTF8StreamJsonParser.java:797)\n\tat com.fasterxml.jackson.databind.ObjectMapper._readTreeAndClose(ObjectMapper.java:4928)\n\tat com.fasterxml.jackson.databind.ObjectMapper.readTree(ObjectMapper.java:3292)\n\tat org.apache.kafka.connect.json.JsonDeserializer.deserialize(JsonDeserializer.java:73)\n\t... 19 more\n"
+        }
+      ],
+      "type": "sink"
+    },
+    "info": {
+      "name": "orders-file-sink",
+      "config": {
+        "connector.class": "org.apache.kafka.connect.file.FileStreamSinkConnector",
+        "file": "/tmp/orders.out",
+        "topics": "orders",
+        "tasks.max": "1",
+        "value.converter.schemas.enable": "false",
+        "name": "orders-file-sink",
+        "value.converter": "org.apache.kafka.connect.json.JsonConverter",
+        "key.converter": "org.apache.kafka.connect.storage.StringConverter"
+      },
+      "tasks": [
+        {
+          "connector": "orders-file-sink",
+          "task": 0
+        }
+      ],
+      "type": "sink"
+    }
+  }
+}

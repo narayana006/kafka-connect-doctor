@@ -1,0 +1,300 @@
+{
+  "pg-orders-sink": {
+    "status": {
+      "name": "pg-orders-sink",
+      "connector": {
+        "state": "RUNNING",
+        "worker_id": "connect-1.example.com:8083"
+      },
+      "tasks": [
+        {
+          "id": 0,
+          "state": "FAILED",
+          "worker_id": "connect-1.example.com:8083",
+          "trace": "org.apache.kafka.connect.errors.ConnectException: org.postgresql.util.PSQLException: FATAL: password authentication failed for user \"kafka_sink\"\n\tat io.confluent.connect.jdbc.util.CachedConnectionProvider.getConnection(CachedConnectionProvider.java:62)\n\tat io.confluent.connect.jdbc.sink.JdbcSinkTask.put(JdbcSinkTask.java:89)\n\tat org.apache.kafka.connect.runtime.WorkerSinkTask.deliverMessages(WorkerSinkTask.java:601)\nCaused by: org.postgresql.util.PSQLException: FATAL: password authentication failed for user \"kafka_sink\"\n\tat org.postgresql.core.v3.ConnectionFactoryImpl.doAuthentication(ConnectionFactoryImpl.java:693)\n\t... 12 more\n"
+        },
+        {
+          "id": 1,
+          "state": "FAILED",
+          "worker_id": "connect-2.example.com:8083",
+          "trace": "org.apache.kafka.connect.errors.ConnectException: org.postgresql.util.PSQLException: FATAL: password authentication failed for user \"kafka_sink\"\n\tat io.confluent.connect.jdbc.util.CachedConnectionProvider.getConnection(CachedConnectionProvider.java:62)\n\tat io.confluent.connect.jdbc.sink.JdbcSinkTask.put(JdbcSinkTask.java:89)\n\tat org.apache.kafka.connect.runtime.WorkerSinkTask.deliverMessages(WorkerSinkTask.java:601)\nCaused by: org.postgresql.util.PSQLException: FATAL: password authentication failed for user \"kafka_sink\"\n\tat org.postgresql.core.v3.ConnectionFactoryImpl.doAuthentication(ConnectionFactoryImpl.java:693)\n\t... 12 more\n"
+        }
+      ],
+      "type": "sink"
+    },
+    "info": {
+      "name": "pg-orders-sink",
+      "config": {
+        "connector.class": "io.confluent.connect.jdbc.JdbcSinkConnector",
+        "name": "pg-orders-sink",
+        "tasks.max": "2",
+        "topics": "orders",
+        "connection.url": "jdbc:postgresql://db.example.com:5432/orders"
+      },
+      "tasks": [
+        {
+          "connector": "pg-orders-sink",
+          "task": 0
+        },
+        {
+          "connector": "pg-orders-sink",
+          "task": 1
+        }
+      ],
+      "type": "sink"
+    }
+  },
+  "orders-avro-sink": {
+    "status": {
+      "name": "orders-avro-sink",
+      "connector": {
+        "state": "RUNNING",
+        "worker_id": "connect-2.example.com:8083"
+      },
+      "tasks": [
+        {
+          "id": 0,
+          "state": "FAILED",
+          "worker_id": "connect-2.example.com:8083",
+          "trace": "org.apache.kafka.connect.errors.ConnectException: Tolerance exceeded in error handler\n\tat org.apache.kafka.connect.runtime.errors.RetryWithToleranceOperator.execAndHandleError(RetryWithToleranceOperator.java:230)\nCaused by: org.apache.kafka.connect.errors.DataException: Failed to deserialize data for topic orders.v2 to Avro: \n\tat io.confluent.connect.avro.AvroConverter.toConnectData(AvroConverter.java:148)\nCaused by: org.apache.kafka.common.errors.SerializationException: Unknown magic byte!\n\tat io.confluent.kafka.serializers.AbstractKafkaSchemaSerDe.getByteBuffer(AbstractKafkaSchemaSerDe.java:250)\n\t... 17 more\n"
+        }
+      ],
+      "type": "sink"
+    },
+    "info": {
+      "name": "orders-avro-sink",
+      "config": {
+        "connector.class": "io.confluent.connect.jdbc.JdbcSinkConnector",
+        "name": "orders-avro-sink",
+        "tasks.max": "1",
+        "topics": "orders.v2",
+        "value.converter": "io.confluent.connect.avro.AvroConverter"
+      },
+      "tasks": [
+        {
+          "connector": "orders-avro-sink",
+          "task": 0
+        }
+      ],
+      "type": "sink"
+    }
+  },
+  "inventory-cdc-source": {
+    "status": {
+      "name": "inventory-cdc-source",
+      "connector": {
+        "state": "RUNNING",
+        "worker_id": "connect-3.example.com:8083"
+      },
+      "tasks": [
+        {
+          "id": 0,
+          "state": "FAILED",
+          "worker_id": "connect-3.example.com:8083",
+          "trace": "org.apache.kafka.connect.errors.ConnectException: Unable to connect to the database\n\tat io.example.connect.mysql.MySqlSourceTask.start(MySqlSourceTask.java:118)\n\tat org.apache.kafka.connect.runtime.WorkerSourceTask.initializeAndStart(WorkerSourceTask.java:278)\nCaused by: java.net.ConnectException: Connection refused\n\tat java.base/sun.nio.ch.Net.connect0(Native Method)\n\t... 9 more\n"
+        }
+      ],
+      "type": "source"
+    },
+    "info": {
+      "name": "inventory-cdc-source",
+      "config": {
+        "connector.class": "io.example.connect.mysql.MySqlSourceConnector",
+        "name": "inventory-cdc-source",
+        "tasks.max": "1",
+        "database.hostname": "mysql.example.com"
+      },
+      "tasks": [
+        {
+          "connector": "inventory-cdc-source",
+          "task": 0
+        }
+      ],
+      "type": "source"
+    }
+  },
+  "s3-archive-sink": {
+    "status": {
+      "name": "s3-archive-sink",
+      "connector": {
+        "state": "RUNNING",
+        "worker_id": "connect-1.example.com:8083"
+      },
+      "tasks": [
+        {
+          "id": 0,
+          "state": "RUNNING",
+          "worker_id": "connect-1.example.com:8083"
+        },
+        {
+          "id": 1,
+          "state": "FAILED",
+          "worker_id": "connect-3.example.com:8083",
+          "trace": "java.lang.OutOfMemoryError: Java heap space\n\tat java.base/java.util.Arrays.copyOf(Arrays.java:3537)\n\tat io.example.connect.s3.S3OutputStream.write(S3OutputStream.java:97)\n"
+        },
+        {
+          "id": 2,
+          "state": "RUNNING",
+          "worker_id": "connect-2.example.com:8083"
+        }
+      ],
+      "type": "sink"
+    },
+    "info": {
+      "name": "s3-archive-sink",
+      "config": {
+        "connector.class": "io.example.connect.s3.S3SinkConnector",
+        "name": "s3-archive-sink",
+        "tasks.max": "3",
+        "topics": "orders,payments",
+        "s3.bucket.name": "acme-archive-example"
+      },
+      "tasks": [
+        {
+          "connector": "s3-archive-sink",
+          "task": 0
+        },
+        {
+          "connector": "s3-archive-sink",
+          "task": 1
+        },
+        {
+          "connector": "s3-archive-sink",
+          "task": 2
+        }
+      ],
+      "type": "sink"
+    }
+  },
+  "audit-source": {
+    "status": {
+      "name": "audit-source",
+      "connector": {
+        "state": "RUNNING",
+        "worker_id": "connect-2.example.com:8083"
+      },
+      "tasks": [
+        {
+          "id": 0,
+          "state": "FAILED",
+          "worker_id": "connect-2.example.com:8083",
+          "trace": "org.apache.kafka.connect.errors.ConnectException: Unrecoverable exception from producer send callback\n\tat org.apache.kafka.connect.runtime.WorkerSourceTask.maybeThrowProducerSendException(WorkerSourceTask.java:340)\nCaused by: org.apache.kafka.common.errors.TimeoutException: Topic audit.events not present in metadata after 60000 ms.\n"
+        }
+      ],
+      "type": "source"
+    },
+    "info": {
+      "name": "audit-source",
+      "config": {
+        "connector.class": "io.example.connect.http.HttpSourceConnector",
+        "name": "audit-source",
+        "tasks.max": "1",
+        "topic": "audit.events"
+      },
+      "tasks": [
+        {
+          "connector": "audit-source",
+          "task": 0
+        }
+      ],
+      "type": "source"
+    }
+  },
+  "legacy-jdbc-source": {
+    "status": {
+      "name": "legacy-jdbc-source",
+      "connector": {
+        "state": "FAILED",
+        "worker_id": "connect-3.example.com:8083",
+        "trace": "org.apache.kafka.common.config.ConfigException: Missing required configuration \"connection.url\" which has no default value.\n\tat org.apache.kafka.common.config.ConfigDef.parseValue(ConfigDef.java:493)\n\tat io.confluent.connect.jdbc.source.JdbcSourceConnector.start(JdbcSourceConnector.java:75)\n"
+      },
+      "tasks": [],
+      "type": "source"
+    },
+    "info": {
+      "name": "legacy-jdbc-source",
+      "config": {
+        "connector.class": "io.confluent.connect.jdbc.JdbcSourceConnector",
+        "name": "legacy-jdbc-source",
+        "tasks.max": "1"
+      },
+      "tasks": [],
+      "type": "source"
+    }
+  },
+  "metrics-sink": {
+    "status": {
+      "name": "metrics-sink",
+      "connector": {
+        "state": "PAUSED",
+        "worker_id": "connect-1.example.com:8083"
+      },
+      "tasks": [
+        {
+          "id": 0,
+          "state": "PAUSED",
+          "worker_id": "connect-1.example.com:8083"
+        }
+      ],
+      "type": "sink"
+    },
+    "info": {
+      "name": "metrics-sink",
+      "config": {
+        "connector.class": "io.example.connect.http.HttpSinkConnector",
+        "name": "metrics-sink",
+        "tasks.max": "1",
+        "topics": "metrics"
+      },
+      "tasks": [
+        {
+          "connector": "metrics-sink",
+          "task": 0
+        }
+      ],
+      "type": "sink"
+    }
+  },
+  "clickstream-sink": {
+    "status": {
+      "name": "clickstream-sink",
+      "connector": {
+        "state": "RUNNING",
+        "worker_id": "connect-2.example.com:8083"
+      },
+      "tasks": [
+        {
+          "id": 0,
+          "state": "RUNNING",
+          "worker_id": "connect-2.example.com:8083"
+        },
+        {
+          "id": 1,
+          "state": "UNASSIGNED",
+          "worker_id": null
+        }
+      ],
+      "type": "sink"
+    },
+    "info": {
+      "name": "clickstream-sink",
+      "config": {
+        "connector.class": "io.example.connect.s3.S3SinkConnector",
+        "name": "clickstream-sink",
+        "tasks.max": "2",
+        "topics": "clickstream"
+      },
+      "tasks": [
+        {
+          "connector": "clickstream-sink",
+          "task": 0
+        },
+        {
+          "connector": "clickstream-sink",
+          "task": 1
+        }
+      ],
+      "type": "sink"
+    }
+  }
+}

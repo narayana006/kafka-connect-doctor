@@ -1,0 +1,29 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.10", "3.12"]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Install
+        run: pip install -e ".[dev]"
+      - name: Test
+        run: pytest -q
+      - name: Run the CLI on the examples
+        run: |
+          # exit code 3 means "failures found", which is expected for these examples
+          set +e
+          kafka-connect-doctor examples/connectors-expanded.json; test $? -eq 3 || exit 1
+          kafka-connect-doctor examples/illustrative-cluster.json --format json > /dev/null; test $? -eq 3 || exit 1
+          kafka-connect-doctor examples/audit-archive-sink.status.json --legacy; test $? -eq 3 || exit 1
